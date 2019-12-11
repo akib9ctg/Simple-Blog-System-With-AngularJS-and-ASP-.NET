@@ -1,0 +1,62 @@
+﻿
+@model BlogSystemApp.Models.Post
+<script type="text/javascript">
+        var userID=@Session["Id"];
+</script>
+@{
+    ViewBag.Title = "Post";
+}
+    <div ng-controller="PostController">
+        
+        @{
+            int login = Convert.ToInt32(Session["login"]);
+
+            if (login == 1)
+            {
+                
+                
+                <div>
+                    <h2>Post</h2>
+                    <div class="form-horizontal">
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.PostDetails, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <textarea class="form-control" type="text" cols="40" rows="5" ng-model="postText"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Share" class="btn btn-default" ng-click="submitPost(postText)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <h4>All Post</h4>
+                        <hr />
+                        <div dir-paginate="post in allPosts|itemsPerPage:5 | orderBy : '-Time'">
+                            <h3>{{post.Name}}</h3>
+                            <h4>{{post.PostDetails}}</h4>
+                            <h6>{{post.Time}}</h6>
+                        </div>
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                Response.Redirect("~/Home/SignIn");
+            }
+        }
+
+
+
+    </div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
